@@ -29,7 +29,7 @@ export function Hero() {
           >
             Discover the Craft.
             <br />
-            <em className="font-medium text-secondary not-italic sm:italic">Carry the Story.</em>
+            <em className="font-medium text-[#ffc94d] not-italic sm:italic">Carry the Story.</em>
           </h1>
           <p className="mt-6 max-w-lg animate-fade-up text-lg leading-relaxed text-white/80 [animation-delay:160ms] sm:text-xl">
             Explore authentic Bhutanese craftsmanship, made by local artisans and brought closer to you.
