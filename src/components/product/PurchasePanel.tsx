@@ -128,7 +128,7 @@ export function PurchasePanel({
           <ShieldCheck className="mt-0.5 size-4 shrink-0 text-accent" aria-hidden />
           <span>
             <strong className="font-semibold">Secure checkout</strong>
-            <span className="block text-muted">Pay by mobile banking, card or cash.</span>
+            <span className="block text-muted">Pay by mobile banking or cash on delivery.</span>
           </span>
         </li>
         <li className="flex items-start gap-2.5">

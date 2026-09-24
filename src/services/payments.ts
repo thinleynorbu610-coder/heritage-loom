@@ -23,13 +23,7 @@ export const PAYMENT_METHODS: PaymentMethodOption[] = [
   {
     id: "mobile-banking",
     label: "Mobile banking",
-    description: "Pay from your Bhutanese bank's mobile app. Connects to a local payment gateway once integrated.",
-    status: "demo",
-  },
-  {
-    id: "card",
-    label: "Debit or credit card",
-    description: "Visa or Mastercard via a secure hosted payment page. You will never enter card details on Heritage Loom.",
+    description: "Scan a QR code with your bank's mobile app, then upload proof of payment.",
     status: "demo",
   },
   {
@@ -39,6 +33,16 @@ export const PAYMENT_METHODS: PaymentMethodOption[] = [
     status: "demo",
   },
 ];
+
+/**
+ * Static demo QR code — encodes a placeholder payee string, not a real bank
+ * account. The real gateway will generate an order-specific QR per bank API.
+ */
+export const MOBILE_BANKING_QR_URL =
+  "https://api.qrserver.com/v1/create-qr-code/?size=280x280&margin=10&data=" +
+  encodeURIComponent("Heritage Loom | Payee: Heritage Loom Pvt. Ltd. | Acc: 100-1000-0000-01");
+export const MOBILE_BANKING_ACCOUNT_NAME = "Heritage Loom Pvt. Ltd.";
+export const MOBILE_BANKING_ACCOUNT_NUMBER = "100 1000 0000 01";
 
 export const DELIVERY_FEE = 150;
 export const FREE_DELIVERY_THRESHOLD = 5000;

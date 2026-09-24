@@ -1,4 +1,4 @@
-import { Check, CreditCard, Home, Package, ShoppingBag, Truck } from "lucide-react";
+import { Check, Clock, CreditCard, Home, Package, ShoppingBag, Truck } from "lucide-react";
 import Link from "next/link";
 import { SmartImage } from "@/components/ui/SmartImage";
 import { StatusBadge } from "@/components/ui/Badge";
@@ -101,6 +101,19 @@ export function OrderDetails({ order }: { order: Order }) {
           <p className="text-sm text-muted">{current?.description}</p>
         </div>
       </div>
+
+      {order.paymentVerification === "awaiting-verification" && (
+        <div className="flex items-start gap-3 rounded-2xl border border-warning/20 bg-warning-soft p-5 text-warning">
+          <Clock className="mt-0.5 size-5 shrink-0" aria-hidden />
+          <p>
+            <strong className="font-semibold">Payment is being verified.</strong>
+            <span className="block text-warning/90">
+              We&apos;re checking your mobile banking payment. This usually takes a few hours, and your order will move
+              to &ldquo;Payment Confirmed&rdquo; once it&apos;s cleared.
+            </span>
+          </p>
+        </div>
+      )}
 
       <div className="rounded-2xl border border-border bg-surface p-6 sm:p-8">
         <OrderProgress order={order} />

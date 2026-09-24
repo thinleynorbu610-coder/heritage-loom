@@ -9,7 +9,7 @@ import { createContext, useCallback, useContext, useMemo } from "react";
 import { demoOrders } from "@/data/orders";
 import { createPersistentStore, useStore } from "@/lib/persistent-store";
 import { addDays, todayISO } from "@/lib/utils";
-import type { DeliveryAddress, Order, OrderLine, PaymentMethodId } from "@/types";
+import type { DeliveryAddress, Order, OrderLine, PaymentMethodId, PaymentProof } from "@/types";
 
 const placedStore = createPersistentStore<Order[]>("hl.orders", []);
 
@@ -20,12 +20,15 @@ interface PlaceOrderInput {
   delivery: number;
   address: DeliveryAddress;
   paymentMethod: PaymentMethodId;
+  paymentProof?: PaymentProof;
 }
 
 interface OrdersContextValue {
   orders: Order[];
   getByNumber: (number: string) => Order | undefined;
   placeOrder: (input: PlaceOrderInput) => Order;
+  /** Admin action: verifies payment evidence (if any) and confirms the order. */
+  confirmOrder: (orderId: string) => void;
 }
 
 const OrdersContext = createContext<OrdersContextValue | null>(null);
@@ -54,23 +57,42 @@ export function OrdersProvider({ children }: { children: React.ReactNode }) {
       subtotal: input.subtotal,
       delivery: input.delivery,
       total: input.subtotal + input.delivery,
-      status: isCod ? "placed" : "paid",
+      // Every order starts as "placed" — an admin must confirm it before it
+      // moves to "paid". Mobile-banking orders additionally need their
+      // payment evidence checked first; cash-on-delivery does not.
+      status: "placed",
       paymentMethod: input.paymentMethod,
+      paymentVerification: isCod ? "not-required" : "awaiting-verification",
+      paymentProof: input.paymentProof,
       address: input.address,
       placedAt: today,
       estimatedDelivery: addDays(today, 6),
-      history: isCod
-        ? [{ status: "placed", date: today }]
-        : [
-            { status: "placed", date: today },
-            { status: "paid", date: today },
-          ],
+      history: [{ status: "placed", date: today }],
     };
     placedStore.set((prev) => [order, ...prev]);
     return order;
   }, []);
 
-  const value = useMemo(() => ({ orders, getByNumber, placeOrder }), [orders, getByNumber, placeOrder]);
+  const confirmOrder = useCallback((orderId: string) => {
+    const today = todayISO();
+    placedStore.set((prev) =>
+      prev.map((o) =>
+        o.id === orderId && o.status === "placed"
+          ? {
+              ...o,
+              status: "paid",
+              paymentVerification: o.paymentVerification === "awaiting-verification" ? "verified" : o.paymentVerification,
+              history: [...o.history, { status: "paid", date: today }],
+            }
+          : o,
+      ),
+    );
+  }, []);
+
+  const value = useMemo(
+    () => ({ orders, getByNumber, placeOrder, confirmOrder }),
+    [orders, getByNumber, placeOrder, confirmOrder],
+  );
   return <OrdersContext.Provider value={value}>{children}</OrdersContext.Provider>;
 }
 

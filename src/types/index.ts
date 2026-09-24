@@ -139,6 +139,13 @@ export interface OrderLine {
   unitPrice: number;
 }
 
+export interface PaymentProof {
+  screenshotDataUrl: string;
+  transactionNumber: string;
+}
+
+export type PaymentVerificationStatus = "not-required" | "awaiting-verification" | "verified";
+
 export interface Order {
   id: ID;
   number: string; // e.g. HL-2026-0001
@@ -149,13 +156,15 @@ export interface Order {
   total: number;
   status: OrderStatus;
   paymentMethod: PaymentMethodId;
+  paymentVerification: PaymentVerificationStatus;
+  paymentProof?: PaymentProof;
   address: DeliveryAddress;
   placedAt: string;
   estimatedDelivery: string;
   history: { status: OrderStatus; date: string }[];
 }
 
-export type PaymentMethodId = "mobile-banking" | "card" | "cash-on-delivery";
+export type PaymentMethodId = "mobile-banking" | "cash-on-delivery";
 
 export type UserRole = "customer" | "artisan" | "admin";
 

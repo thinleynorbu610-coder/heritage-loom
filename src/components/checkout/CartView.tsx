@@ -131,7 +131,8 @@ export function CartView() {
                 <Lock className="size-4" aria-hidden /> Proceed to Checkout
               </LinkButton>
               <p className="mt-4 text-center text-xs text-muted">
-                Your payment is handled by a secure payment gateway. Heritage Loom never stores card details.
+                Pay by mobile banking (with proof of payment) or cash on delivery. Every order is confirmed by our
+                team before it&apos;s prepared.
               </p>
             </div>
           </aside>
