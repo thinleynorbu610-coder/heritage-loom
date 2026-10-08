@@ -44,3 +44,22 @@ export function initials(name: string) {
     .join("")
     .toUpperCase();
 }
+
+function csvCell(v: string | number) {
+  const s = String(v);
+  return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+}
+
+/** Trigger a browser download of a CSV file built from one or more row blocks — no backend required. */
+export function downloadCsv(filename: string, blocks: (string | number)[][][]) {
+  const csv = blocks.map((rows) => rows.map((row) => row.map(csvCell).join(",")).join("\n")).join("\n\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}

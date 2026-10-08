@@ -1,11 +1,9 @@
 "use client";
 
-import { ArrowRight, Clock, Mail, MapPin, Phone } from "lucide-react";
+import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
 import { Logo } from "@/components/brand/Logo";
 import { MotifDivider, WovenStrip } from "@/components/ui/Motif";
-import { useToast } from "@/context/ToastContext";
 import { footerNav } from "./navigation";
 
 const contactDetails = [
@@ -32,24 +30,6 @@ const socials = [
 ];
 
 export function Footer() {
-  const { toast } = useToast();
-  const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
-
-  const subscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!/^\S+@\S+\.\S+$/.test(email)) {
-      setError("Please enter a valid email address.");
-      return;
-    }
-    setError("");
-    setEmail("");
-    toast({
-      title: "You're on the list",
-      description: "Demo mode — newsletter delivery will be enabled with the backend.",
-    });
-  };
-
   return (
     <footer className="relative mt-auto overflow-hidden bg-ink text-background">
       <WovenStrip />
@@ -60,34 +40,6 @@ export function Footer() {
             <p className="max-w-sm font-serif text-2xl leading-snug text-background/90">
               Connecting Bhutanese artisans with customers through culture and commerce.
             </p>
-            <form onSubmit={subscribe} noValidate className="max-w-md">
-              <label htmlFor="newsletter" className="text-sm font-semibold text-background">
-                Stories from the loom, once a month
-              </label>
-              <div className="mt-2 flex gap-2">
-                <input
-                  id="newsletter"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Your email address"
-                  aria-invalid={!!error || undefined}
-                  aria-describedby={error ? "newsletter-error" : undefined}
-                  className="h-12 min-w-0 flex-1 rounded-md border border-white/15 bg-white/5 px-4 text-background placeholder:text-background/40 outline-none focus:border-secondary"
-                />
-                <button
-                  type="submit"
-                  className="inline-flex h-12 items-center gap-2 rounded-md bg-secondary px-5 font-semibold text-ink transition-colors hover:bg-background"
-                >
-                  Subscribe <ArrowRight className="size-4" aria-hidden />
-                </button>
-              </div>
-              {error && (
-                <p id="newsletter-error" className="mt-2 text-sm text-secondary" role="alert">
-                  {error}
-                </p>
-              )}
-            </form>
           </div>
 
           <div className="grid grid-cols-2 gap-10 sm:grid-cols-4">

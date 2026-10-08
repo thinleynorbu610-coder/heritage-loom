@@ -100,36 +100,39 @@ export function Hero() {
       <div className="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/50 to-ink/20" />
       <div className="absolute inset-0 -z-10 bg-motif-light opacity-70" />
 
-      {/* Foreground cutout — real customers in handwoven gho */}
+      {/* Foreground cutout — real customers in handwoven gho.
+          Phone: centered, pinned to the top, above the heading.
+          Tablet / shrunk-desktop (sm–lg): centered, nudged down a bit.
+          Full desktop (xl+): pinned to the left, beside the text. */}
       <div
         className={cn(
-          "pointer-events-none absolute left-1/2 top-0 z-0 aspect-[3/4] w-[42%] max-w-[190px] -translate-x-1/2",
-          "sm:left-3 sm:top-2 sm:max-w-[230px] sm:translate-x-0",
-          "md:left-4 md:top-3 md:max-w-[300px]",
-          "lg:top-4 lg:max-w-[370px]",
-          "xl:left-6 xl:max-w-[460px]",
-          "2xl:left-12 2xl:max-w-[500px]",
+          "pointer-events-none absolute left-1/2 top-0 z-0 aspect-[3/4] w-[38%] max-w-[170px] -translate-x-1/2",
+          "sm:top-8 sm:w-[32%] sm:max-w-[200px]",
+          "md:top-10 md:w-[28%] md:max-w-[250px]",
+          "lg:top-10 lg:max-w-[300px]",
+          "xl:left-6 xl:top-3 xl:max-w-[370px] xl:translate-x-0",
+          "2xl:left-12 2xl:max-w-[400px]",
         )}
       >
         <SmartImage
           src={media.ghoTwins}
           alt="Two friends standing back to back, wearing patterned handwoven gho robes"
           fill
-          sizes="(min-width: 1536px) 500px, (min-width: 1280px) 460px, (min-width: 1024px) 370px, (min-width: 768px) 300px, (min-width: 640px) 230px, 130px"
+          sizes="(min-width: 1536px) 400px, (min-width: 1280px) 370px, (min-width: 1024px) 300px, (min-width: 768px) 250px, (min-width: 640px) 200px, 120px"
           className="object-contain object-bottom drop-shadow-[0_25px_35px_rgba(0,0,0,0.45)]"
         />
       </div>
 
-      <div className="container-page flex min-h-[calc(100svh-var(--header-h)-2.25rem)] flex-col justify-end pt-24 pb-10 sm:min-h-[640px] lg:min-h-[min(820px,calc(100svh-var(--header-h)-2.25rem))] lg:pb-14">
-        <div key={active} className="max-w-2xl pt-44 sm:ml-[270px] sm:pt-0 md:ml-[340px] lg:ml-[410px] xl:ml-[510px] 2xl:ml-[580px]">
+      <div className="container-page flex min-h-[calc(100svh-var(--header-h)-2.25rem)] flex-col justify-end pt-20 pb-6 sm:min-h-[600px] lg:min-h-[min(720px,calc(100svh-var(--header-h)-2.25rem))] lg:pb-8">
+        <div key={active} className="max-w-2xl pt-36 sm:pt-52 md:pt-60 lg:pt-64 xl:ml-[400px] xl:pt-0 2xl:ml-[430px]">
           <p className="eyebrow animate-fade-up text-secondary">{slide.eyebrow}</p>
-          <h1 className="mt-6 animate-fade-up font-display text-[3.2rem] text-balance [animation-delay:80ms] sm:text-7xl lg:text-[5.5rem]">
+          <h1 className="mt-4 animate-fade-up font-display text-[2.6rem] text-balance [animation-delay:80ms] sm:text-6xl lg:text-[4rem]">
             {slide.title}
           </h1>
-          <p className="mt-6 max-w-lg animate-fade-up text-lg leading-relaxed text-white/80 [animation-delay:160ms] sm:text-xl">
+          <p className="mt-4 max-w-lg animate-fade-up text-base leading-relaxed text-white/80 [animation-delay:160ms] sm:text-lg">
             {slide.copy}
           </p>
-          <div className="mt-9 flex animate-fade-up flex-col gap-3 [animation-delay:240ms] sm:flex-row">
+          <div className="mt-6 flex animate-fade-up flex-col gap-3 [animation-delay:240ms] sm:flex-row">
             <LinkButton href={slide.primaryHref} size="lg" className="sm:min-w-52">
               {slide.primaryLabel}
               <ArrowRight className="size-4" aria-hidden />
@@ -139,7 +142,7 @@ export function Hero() {
             </LinkButton>
           </div>
 
-          <div className="mt-8 flex animate-fade-up items-center gap-2 [animation-delay:280ms]">
+          <div className="mt-6 flex animate-fade-up items-center gap-2 [animation-delay:280ms]">
             {slides.map((s, i) => (
               <button
                 key={s.eyebrow}
@@ -156,7 +159,7 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="mt-16 flex animate-fade-up flex-col gap-6 border-t border-white/15 pt-6 [animation-delay:320ms] sm:flex-row sm:items-end sm:justify-between">
+        <div className="mt-8 flex animate-fade-up flex-col gap-6 border-t border-white/15 pt-5 [animation-delay:320ms] sm:flex-row sm:items-end sm:justify-between lg:mt-10">
           <dl className="grid grid-cols-3 gap-6 sm:flex sm:gap-12">
             {[
               ["8", "Verified artisans"],
@@ -166,7 +169,7 @@ export function Hero() {
               <div key={label}>
                 <dt className="sr-only">{label}</dt>
                 <dd>
-                  <span className="block font-serif text-4xl leading-none text-white">{n}</span>
+                  <span className="block font-serif text-3xl leading-none text-white">{n}</span>
                   <span className="mt-1 block text-xs tracking-wide text-white/65">{label}</span>
                 </dd>
               </div>
@@ -176,8 +179,8 @@ export function Hero() {
             href="/products/handwoven-yathra-scarf"
             className="group hidden items-center gap-3 rounded-lg border border-white/15 bg-white/5 p-2 pr-5 backdrop-blur-md transition-colors hover:bg-white/10 md:flex"
           >
-            <span className="relative size-14 overflow-hidden rounded-md bg-white/10">
-              <SmartImage src={media.loomColour} alt="" fill sizes="56px" className="object-cover" />
+            <span className="relative size-12 overflow-hidden rounded-md bg-white/10">
+              <SmartImage src={media.loomColour} alt="" fill sizes="48px" className="object-cover" />
             </span>
             <span className="text-sm">
               <span className="block text-xs text-secondary">Now on the loom</span>

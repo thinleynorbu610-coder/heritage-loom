@@ -16,7 +16,7 @@ const navItems: DashboardNavItem[] = [
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
-    <DashboardShell navItems={navItems} roleLabel="admin">
+    <DashboardShell navItems={navItems} roleLabel="admin" offsetTop={false}>
       {children}
     </DashboardShell>
   );

@@ -10,19 +10,33 @@ export function StatCard({
   label: string;
   value: string;
   icon: React.ReactNode;
-  trend?: string;
-  tone?: "default" | "primary";
+  trend?: React.ReactNode;
+  tone?: "default" | "primary" | "danger";
 }) {
   return (
-    <div className={cn("rounded-xl border border-border p-5", tone === "primary" ? "bg-ink text-white" : "bg-surface")}>
+    <div
+      className={cn(
+        "rounded-xl border p-5",
+        tone === "primary" ? "border-ink bg-ink text-white" : tone === "danger" ? "border-danger/20 bg-danger-soft" : "border-border bg-surface",
+      )}
+    >
       <div className="flex items-start justify-between">
-        <p className={cn("text-sm font-semibold", tone === "primary" ? "text-white/70" : "text-muted")}>{label}</p>
-        <span className={cn("flex size-9 items-center justify-center rounded-full", tone === "primary" ? "bg-white/10 text-secondary" : "bg-primary-soft text-primary")}>
+        <p className={cn("text-sm font-semibold", tone === "primary" ? "text-white/70" : tone === "danger" ? "text-danger" : "text-muted")}>{label}</p>
+        <span
+          className={cn(
+            "flex size-9 items-center justify-center rounded-full",
+            tone === "primary" ? "bg-white/10 text-secondary" : tone === "danger" ? "bg-surface text-danger" : "bg-primary-soft text-primary",
+          )}
+        >
           {icon}
         </span>
       </div>
-      <p className="mt-3 font-serif text-3xl font-semibold tabular-nums">{value}</p>
-      {trend && <p className={cn("mt-1 text-xs", tone === "primary" ? "text-white/60" : "text-muted")}>{trend}</p>}
+      <p className={cn("mt-3 font-serif text-3xl font-semibold tabular-nums", tone === "danger" && "text-danger")}>{value}</p>
+      {trend && (
+        <div className={cn("mt-1 text-xs", tone === "primary" ? "text-white/60" : tone === "danger" ? "font-semibold text-danger" : "text-muted")}>
+          {trend}
+        </div>
+      )}
     </div>
   );
 }

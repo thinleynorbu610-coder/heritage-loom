@@ -13,15 +13,25 @@ export interface DashboardNavItem {
   label: string;
   href: string;
   icon: React.ComponentType<{ className?: string }>;
+  badge?: { text: string; tone?: "neutral" | "danger" };
 }
 
 export function DashboardShell({
   navItems,
+  secondaryNavItems,
   roleLabel,
+  hubLabel,
+  offsetTop = true,
   children,
 }: {
   navItems: DashboardNavItem[];
+  /** Links shown below a divider, above the profile card (e.g. Settings, Help & Support). */
+  secondaryNavItems?: DashboardNavItem[];
   roleLabel: string;
+  /** Small eyebrow above the nav, e.g. "Artisan Hub". Defaults from roleLabel. */
+  hubLabel?: string;
+  /** Set false when this shell isn't rendered below the public site header. */
+  offsetTop?: boolean;
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
@@ -37,48 +47,70 @@ export function DashboardShell({
     router.push("/");
   };
 
+  const NavLink = ({ item }: { item: DashboardNavItem }) => {
+    const Icon = item.icon;
+    const active = isActive(item.href);
+    return (
+      <li>
+        <Link
+          href={item.href}
+          onClick={() => setMobileOpen(false)}
+          aria-current={active ? "page" : undefined}
+          className={cn(
+            "flex items-center gap-3 rounded-lg px-3.5 py-2.5 text-[0.92rem] font-semibold transition-colors",
+            active ? "bg-primary text-white" : "text-white/75 hover:bg-white/8 hover:text-white",
+          )}
+        >
+          <Icon className="size-[1.1rem] shrink-0" />
+          <span className="min-w-0 flex-1 truncate">{item.label}</span>
+          {item.badge && (
+            <span
+              className={cn(
+                "shrink-0 rounded-full px-2 py-0.5 text-[0.68rem] font-bold",
+                item.badge.tone === "danger" ? "bg-danger text-white" : active ? "bg-white/20 text-white" : "bg-white/10 text-white/80",
+              )}
+            >
+              {item.badge.text}
+            </span>
+          )}
+        </Link>
+      </li>
+    );
+  };
+
   const SidebarContent = (
     <>
-      <Logo compact className="px-1" />
-      <nav aria-label={`${roleLabel} navigation`} className="mt-8 flex-1">
+      <Logo compact className="mb-5 px-1" />
+      <p className="px-3.5 text-[0.68rem] font-bold tracking-[0.12em] text-white/40 uppercase">{hubLabel ?? `${roleLabel} Hub`}</p>
+      <nav aria-label={`${roleLabel} navigation`} className="mt-3 flex-1">
         <ul className="flex flex-col gap-1">
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const active = isActive(item.href);
-            return (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  onClick={() => setMobileOpen(false)}
-                  aria-current={active ? "page" : undefined}
-                  className={cn(
-                    "flex items-center gap-3 rounded-lg px-3.5 py-2.5 text-[0.95rem] font-semibold transition-colors",
-                    active ? "bg-primary text-white" : "text-text hover:bg-surface-muted",
-                  )}
-                >
-                  <Icon className="size-[1.1rem] shrink-0" />
-                  {item.label}
-                </Link>
-              </li>
-            );
-          })}
+          {navItems.map((item) => (
+            <NavLink key={item.href} item={item} />
+          ))}
         </ul>
       </nav>
+      {secondaryNavItems && secondaryNavItems.length > 0 && (
+        <ul className="flex flex-col gap-1 border-t border-white/10 pt-3">
+          {secondaryNavItems.map((item) => (
+            <NavLink key={item.href} item={item} />
+          ))}
+        </ul>
+      )}
       {isClient && user && (
-        <div className="mt-auto border-t border-border pt-4">
-          <div className="flex items-center gap-3 px-1">
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary-soft font-semibold text-primary">
+        <div className="mt-4 border-t border-white/10 pt-4">
+          <div className="flex items-center gap-3 rounded-xl bg-white/5 p-2.5">
+            <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-secondary-soft text-sm font-semibold text-accent">
               {initials(user.name)}
             </span>
-            <span className="min-w-0">
-              <span className="block truncate text-sm font-semibold">{user.name}</span>
-              <span className="block text-xs text-muted capitalize">{roleLabel}</span>
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-sm font-semibold text-white">{user.name}</span>
+              <span className="block truncate text-xs text-white/50 capitalize">{roleLabel}</span>
             </span>
           </div>
           <button
             type="button"
             onClick={doLogout}
-            className="mt-3 flex w-full items-center gap-3 rounded-lg px-3.5 py-2.5 text-sm font-semibold text-danger hover:bg-danger-soft"
+            className="mt-2 flex w-full items-center gap-3 rounded-lg px-3.5 py-2.5 text-sm font-semibold text-white/60 hover:bg-white/8 hover:text-white"
           >
             <LogOut className="size-[1.1rem]" /> Logout
           </button>
@@ -88,17 +120,27 @@ export function DashboardShell({
   );
 
   return (
-    <div className="mx-auto flex min-h-[calc(100vh-var(--header-h))] max-w-[1600px]">
+    <div className={cn("mx-auto flex max-w-[1600px]", offsetTop ? "min-h-[calc(100vh-var(--header-h))]" : "min-h-screen")}>
       {/* Desktop sidebar */}
-      <aside className="sticky top-[var(--header-h)] hidden h-[calc(100vh-var(--header-h))] w-64 shrink-0 flex-col border-r border-border bg-surface p-5 lg:flex">
+      <aside
+        className={cn(
+          "sticky hidden w-64 shrink-0 flex-col bg-ink p-5 lg:flex",
+          offsetTop ? "top-[var(--header-h)] h-[calc(100vh-var(--header-h))]" : "top-0 h-screen",
+        )}
+      >
         {SidebarContent}
       </aside>
 
       {mobileOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
           <div className="absolute inset-0 bg-ink/40" onClick={() => setMobileOpen(false)} />
-          <div className="absolute inset-y-0 left-0 flex w-72 flex-col bg-surface p-5 shadow-2xl">
-            <button type="button" onClick={() => setMobileOpen(false)} className="absolute top-4 right-4 rounded-md p-1.5" aria-label="Close menu">
+          <div className="absolute inset-y-0 left-0 flex w-72 flex-col bg-ink p-5 shadow-2xl">
+            <button
+              type="button"
+              onClick={() => setMobileOpen(false)}
+              className="absolute top-4 right-4 rounded-md p-1.5 text-white/70 hover:text-white"
+              aria-label="Close menu"
+            >
               <X className="size-5" />
             </button>
             {SidebarContent}
@@ -107,8 +149,8 @@ export function DashboardShell({
       )}
 
       <main className="min-w-0 flex-1">
-        {/* Mobile top bar — in normal flow so it always sits right under the site header */}
-        <div className="sticky top-[var(--header-h)] z-30 flex h-14 items-center justify-between border-b border-border bg-surface px-4 lg:hidden">
+        {/* Mobile top bar — in normal flow so it always sits right under the site header (when present) */}
+        <div className={cn("sticky z-30 flex h-14 items-center justify-between border-b border-border bg-surface px-4 lg:hidden", offsetTop ? "top-[var(--header-h)]" : "top-0")}>
           <span className="text-sm font-semibold text-muted capitalize">{roleLabel} dashboard</span>
           <button type="button" onClick={() => setMobileOpen(true)} className="rounded-md p-2" aria-label="Open dashboard menu">
             <Menu className="size-5" />

@@ -11,6 +11,9 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "images.unsplash.com" },
     ],
   },
+  // Lets the dev server's hot-reload work when previewing on another device
+  // on the same network (e.g. testing on a phone via the LAN IP).
+  allowedDevOrigins: ["192.168.233.1"],
 };
 
 export default nextConfig;

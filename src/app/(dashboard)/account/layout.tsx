@@ -2,6 +2,7 @@
 
 import { Heart, LayoutGrid, MapPin, Package, Star, User } from "lucide-react";
 import { DashboardShell, type DashboardNavItem } from "@/components/dashboard/DashboardShell";
+import { Header } from "@/components/layout/Header";
 
 const navItems: DashboardNavItem[] = [
   { label: "Overview", href: "/account", icon: LayoutGrid },
@@ -14,8 +15,11 @@ const navItems: DashboardNavItem[] = [
 
 export default function AccountLayout({ children }: { children: React.ReactNode }) {
   return (
-    <DashboardShell navItems={navItems} roleLabel="customer">
-      {children}
-    </DashboardShell>
+    <>
+      <Header />
+      <DashboardShell navItems={navItems} roleLabel="customer">
+        {children}
+      </DashboardShell>
+    </>
   );
 }

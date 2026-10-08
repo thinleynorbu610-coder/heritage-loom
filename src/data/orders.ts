@@ -73,17 +73,34 @@ export const demoOrders: Order[] = [
   },
 ];
 
-/** Orders received by the demo artisan (Pema Choden) — seller dashboard. */
-export const sellerOrders = [
-  { id: "so-1", number: "HL-2026-0142", customer: "Deki Wangmo", productId: "prd-002", quantity: 1, total: 28500, date: "2026-09-22", status: "pending" as const, dzongkhag: "Thimphu" },
-  { id: "so-2", number: "HL-2026-0139", customer: "Karma Choki", productId: "prd-008", quantity: 1, total: 16650, date: "2026-09-21", status: "paid" as const, dzongkhag: "Paro" },
-  { id: "so-3", number: "HL-2026-0131", customer: "Namgay Peldon", productId: "prd-002", quantity: 1, total: 28650, date: "2026-09-18", status: "shipped" as const, dzongkhag: "Sarpang" },
-  { id: "so-4", number: "HL-2026-0120", customer: "Jigme Tobgay", productId: "prd-008", quantity: 1, total: 16500, date: "2026-09-12", status: "delivered" as const, dzongkhag: "Thimphu" },
-  { id: "so-5", number: "HL-2026-0117", customer: "Chimi Lhamo", productId: "prd-008", quantity: 2, total: 33150, date: "2026-09-10", status: "delivered" as const, dzongkhag: "Chhukha" },
-  { id: "so-6", number: "HL-2026-0144", customer: "Sonam Dorji", productId: "prd-008", quantity: 1, total: 16650, date: "2026-09-23", status: "pending" as const, dzongkhag: "Bumthang" },
-];
+export type SellerOrderStatus = "pending" | "paid" | "shipped" | "delivered" | "cancelled";
 
-export type SellerOrderStatus = (typeof sellerOrders)[number]["status"];
+export interface SellerOrder {
+  id: string;
+  number: string;
+  customer: string;
+  customerEmail: string;
+  productId: string;
+  quantity: number;
+  total: number;
+  date: string;
+  status: SellerOrderStatus;
+  dzongkhag: string;
+  /** Mobile banking / bank transfer method the buyer claims to have paid with. */
+  paymentMethod: string;
+  /** Transaction / journal number from the buyer's payment receipt. */
+  paymentRef: string;
+}
+
+/** Orders received by the demo artisan (Pema Choden) — seller dashboard. */
+export const sellerOrders: SellerOrder[] = [
+  { id: "so-1", number: "HL-2026-0142", customer: "Deki Wangmo", customerEmail: "deki.wangmo@example.bt", productId: "prd-002", quantity: 1, total: 28500, date: "2026-09-22", status: "pending", dzongkhag: "Thimphu", paymentMethod: "mBoB", paymentRef: "2793223" },
+  { id: "so-2", number: "HL-2026-0139", customer: "Karma Choki", customerEmail: "karma.choki@example.bt", productId: "prd-008", quantity: 1, total: 16650, date: "2026-09-21", status: "paid", dzongkhag: "Paro", paymentMethod: "Bank Transfer", paymentRef: "2791880" },
+  { id: "so-3", number: "HL-2026-0131", customer: "Namgay Peldon", customerEmail: "namgay.peldon@example.bt", productId: "prd-002", quantity: 1, total: 28650, date: "2026-09-18", status: "shipped", dzongkhag: "Sarpang", paymentMethod: "mBoB", paymentRef: "2788410" },
+  { id: "so-4", number: "HL-2026-0120", customer: "Jigme Tobgay", customerEmail: "jigme.tobgay@example.bt", productId: "prd-008", quantity: 1, total: 16500, date: "2026-09-12", status: "delivered", dzongkhag: "Thimphu", paymentMethod: "mBoB", paymentRef: "2779012" },
+  { id: "so-5", number: "HL-2026-0117", customer: "Chimi Lhamo", customerEmail: "chimi.lhamo@example.bt", productId: "prd-008", quantity: 2, total: 33150, date: "2026-09-10", status: "delivered", dzongkhag: "Chhukha", paymentMethod: "Bank Transfer", paymentRef: "2774590" },
+  { id: "so-6", number: "HL-2026-0144", customer: "Sonam Dorji", customerEmail: "sonam.dorji@example.bt", productId: "prd-008", quantity: 1, total: 16650, date: "2026-09-23", status: "pending", dzongkhag: "Bumthang", paymentMethod: "mBoB", paymentRef: "2793801" },
+];
 
 /** Monthly sales for the demo artisan, in Nu. */
 export const sellerMonthlySales = [

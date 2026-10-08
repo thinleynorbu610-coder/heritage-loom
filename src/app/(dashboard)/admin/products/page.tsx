@@ -1,13 +1,14 @@
 "use client";
 
-import { Eye } from "lucide-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { RequireRole } from "@/components/account/RequireRole";
 import { DashboardHeader } from "@/components/dashboard/DashboardShell";
 import { type Column, DataTable } from "@/components/dashboard/DataTable";
 import { StatusBadge } from "@/components/ui/Badge";
+import { SmartImage } from "@/components/ui/SmartImage";
+import { useProductSubmissions } from "@/context/ProductSubmissionsContext";
 import { useToast } from "@/context/ToastContext";
-import { pendingProducts as initialPending, products as activeProducts } from "@/data/products";
+import { products as catalogProducts } from "@/data/products";
 import { formatDate } from "@/lib/utils";
 import { getArtisanById } from "@/services/catalog";
 import type { Product } from "@/types";
@@ -16,16 +17,32 @@ const TABS = ["pending", "active"] as const;
 
 function ProductModeration() {
   const { toast } = useToast();
-  const [pending, setPending] = useState<Product[]>(initialPending);
+  const { submissions, pendingSubmissions, decide } = useProductSubmissions();
   const [tab, setTab] = useState<(typeof TABS)[number]>("pending");
 
-  const decide = (p: Product, status: "active" | "rejected") => {
-    setPending((prev) => prev.filter((x) => x.id !== p.id));
+  const activeRows = useMemo(() => {
+    const approvedSubmissions = submissions.filter((p) => p.status === "active" && p.id.startsWith("prd-sub-"));
+    return [...approvedSubmissions, ...catalogProducts];
+  }, [submissions]);
+
+  const handleDecide = (p: Product, status: "active" | "rejected") => {
+    decide(p.id, status);
     toast({ title: status === "active" ? "Product approved" : "Product rejected", description: p.name });
   };
 
   const columns: Column<Product>[] = [
-    { key: "product", header: "Product", render: (p) => <span className="font-semibold">{p.name}</span> },
+    {
+      key: "product",
+      header: "Product",
+      render: (p) => (
+        <div className="flex items-center gap-3">
+          <span className="relative size-11 shrink-0 overflow-hidden rounded-md bg-surface-muted">
+            <SmartImage src={p.images[0].src} alt="" fill sizes="44px" className="object-cover" />
+          </span>
+          <span className="max-w-48 truncate font-semibold">{p.name}</span>
+        </div>
+      ),
+    },
     { key: "artisan", header: "Artisan", render: (p) => getArtisanById(p.artisanId)?.name ?? "—" },
     { key: "category", header: "Category", hideOnMobile: true, render: (p) => p.category.replace("-", " ") },
     { key: "status", header: "Status", render: (p) => <StatusBadge status={p.status} /> },
@@ -36,13 +53,10 @@ function ProductModeration() {
       render: (p) =>
         p.status === "pending" ? (
           <div className="flex justify-end gap-2">
-            <button type="button" className="rounded-md p-1.5 hover:bg-surface-muted" aria-label={`Review ${p.name}`}>
-              <Eye className="size-4" />
-            </button>
-            <button type="button" onClick={() => decide(p, "active")} className="rounded-md bg-success-soft px-2.5 py-1 text-xs font-semibold text-success hover:brightness-95">
+            <button type="button" onClick={() => handleDecide(p, "active")} className="rounded-md bg-success-soft px-2.5 py-1 text-xs font-semibold text-success hover:brightness-95">
               Approve
             </button>
-            <button type="button" onClick={() => decide(p, "rejected")} className="rounded-md bg-danger-soft px-2.5 py-1 text-xs font-semibold text-danger hover:brightness-95">
+            <button type="button" onClick={() => handleDecide(p, "rejected")} className="rounded-md bg-danger-soft px-2.5 py-1 text-xs font-semibold text-danger hover:brightness-95">
               Reject
             </button>
           </div>
@@ -52,7 +66,7 @@ function ProductModeration() {
     },
   ];
 
-  const rows = tab === "pending" ? pending : activeProducts;
+  const rows = tab === "pending" ? pendingSubmissions : activeRows;
 
   return (
     <>
@@ -67,7 +81,7 @@ function ProductModeration() {
               tab === t ? "border-ink bg-ink text-background" : "border-border hover:border-text"
             }`}
           >
-            {t} {t === "pending" ? `(${pending.length})` : `(${activeProducts.length})`}
+            {t} {t === "pending" ? `(${pendingSubmissions.length})` : `(${activeRows.length})`}
           </button>
         ))}
       </div>

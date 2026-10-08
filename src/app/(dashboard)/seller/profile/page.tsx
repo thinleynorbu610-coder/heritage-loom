@@ -20,6 +20,7 @@ function SellerProfileForm() {
     name: artisan?.name ?? "",
     specialty: artisan?.specialty ?? "",
     region: artisan?.region ?? "",
+    village: artisan?.village ?? "",
     story: artisan?.story ?? "",
   });
   const [saving, setSaving] = useState(false);
@@ -46,7 +47,11 @@ function SellerProfileForm() {
           <p className="text-sm text-muted">{artisan.specialty}</p>
         </div>
         {artisan.verified ? <Badge tone="success">Verified</Badge> : <Badge tone="warning">Pending verification</Badge>}
-        <Button variant="outline" size="sm">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => toast({ title: "Demo only", description: "Photo uploads connect once storage is live." })}
+        >
           Change photo
         </Button>
       </div>
@@ -57,6 +62,7 @@ function SellerProfileForm() {
           <FormInput label="Specialty" value={form.specialty} onChange={(e) => setForm((f) => ({ ...f, specialty: e.target.value }))} />
           <Select label="Region" options={regions.map((r) => ({ value: r.slug, label: r.name }))} value={form.region} onChange={(e) => setForm((f) => ({ ...f, region: e.target.value }))} />
         </div>
+        <FormInput label="Village" value={form.village} onChange={(e) => setForm((f) => ({ ...f, village: e.target.value }))} />
         <Textarea label="Your story" rows={6} value={form.story} onChange={(e) => setForm((f) => ({ ...f, story: e.target.value }))} hint="This appears on your public artisan page." />
         <Button type="submit" loading={saving} className="self-start">
           Save profile
