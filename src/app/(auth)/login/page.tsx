@@ -12,7 +12,7 @@ import { useToast } from "@/context/ToastContext";
 import type { UserRole } from "@/types";
 
 function LoginForm() {
-  const { loginWithEmail } = useAuth();
+  const { loginWithEmail, loginAs } = useAuth();
   const { toast } = useToast();
   const router = useRouter();
   const params = useSearchParams();
@@ -40,9 +40,9 @@ function LoginForm() {
   };
 
   const quickLogin = (role: UserRole) => {
-    const user = DEMO_ACCOUNTS[role];
-    setEmail(user.email);
-    setPassword("demo");
+    const user = loginAs(role);
+    toast({ title: `Welcome back, ${user.name.split(" ")[0]}`, description: "Demo login — no password is verified." });
+    redirect(user.role);
   };
 
   return (

@@ -76,7 +76,7 @@ function SellerDashboard() {
   return (
     <>
       <DashboardHeader
-        title={`Namtsho, ${artisan?.name.split(" ")[0] ?? "Artisan"}`}
+        title={`Welcome back, ${artisan?.name.split(" ")[0] ?? "Artisan"}`}
         description="Here's how your storefront is doing."
         action={
           <Button variant="outline" onClick={exportReport}>

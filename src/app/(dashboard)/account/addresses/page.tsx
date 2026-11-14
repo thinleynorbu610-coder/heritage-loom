@@ -12,16 +12,22 @@ import { Modal } from "@/components/ui/Overlay";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/context/ToastContext";
 import { dzongkhags } from "@/data/regions";
+import { createPersistentStore, useStore } from "@/lib/persistent-store";
 import type { DeliveryAddress } from "@/types";
 
 const emptyAddress: DeliveryAddress = { fullName: "", phone: "", address: "", dzongkhag: "", gewog: "", notes: "" };
 
+type SavedAddress = DeliveryAddress & { id: string; label: string };
+
+// Persisted locally for the demo, like cart/wishlist — will sync to the API
+// once accounts are backed by the Heritage Loom backend.
+const addressStore = createPersistentStore<SavedAddress[]>("hl.addresses", [
+  { id: "addr-1", label: "Home", fullName: "Tenzin Norbu", phone: "17 12 34 56", address: "House 12, Norzin Lam", dzongkhag: "Thimphu", gewog: "Chang" },
+]);
+
 function Addresses() {
-  const { user } = useAuth();
   const { toast } = useToast();
-  const [addresses, setAddresses] = useState<(DeliveryAddress & { id: string; label: string })[]>([
-    { id: "addr-1", label: "Home", fullName: user?.name ?? "Tenzin Norbu", phone: user?.phone ?? "17 12 34 56", address: "House 12, Norzin Lam", dzongkhag: "Thimphu", gewog: "Chang" },
-  ]);
+  const addresses = useStore(addressStore);
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState(emptyAddress);
   const [label, setLabel] = useState("");
@@ -31,7 +37,7 @@ function Addresses() {
 
   const save = (e: React.FormEvent) => {
     e.preventDefault();
-    setAddresses((prev) => [...prev, { ...form, id: `addr-${Date.now()}`, label: label || "Address" }]);
+    addressStore.set((prev) => [...prev, { ...form, id: `addr-${Date.now()}`, label: label || "Address" }]);
     setOpen(false);
     setForm(emptyAddress);
     setLabel("");
@@ -39,7 +45,7 @@ function Addresses() {
   };
 
   const remove = (id: string) => {
-    setAddresses((prev) => prev.filter((a) => a.id !== id));
+    addressStore.set((prev) => prev.filter((a) => a.id !== id));
     toast({ title: "Address removed", variant: "info" });
   };
 
