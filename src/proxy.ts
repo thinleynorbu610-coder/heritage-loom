@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/lib/supabase/middleware";
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   // No-op until Supabase env vars are configured (Phase 1), so the app stays
   // runnable instead of hard-failing on every request during the migration.
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {

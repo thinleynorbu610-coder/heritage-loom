@@ -5,8 +5,9 @@
  * (checkout → confirmation → tracking) can be demonstrated.
  * Will be replaced by `POST /api/v1/orders` and `GET /api/v1/me/orders`.
  */
-import { createContext, useCallback, useContext, useMemo } from "react";
+import { createContext, useCallback, useContext, useMemo, useEffect } from "react";
 import { demoOrders } from "@/data/orders";
+import { useAuth } from "@/context/AuthContext";
 import { createPersistentStore, useStore } from "@/lib/persistent-store";
 import { addDays, todayISO } from "@/lib/utils";
 import type { DeliveryAddress, Order, OrderLine, PaymentMethodId, PaymentProof } from "@/types";
@@ -37,7 +38,16 @@ const pad = (n: number) => String(n).padStart(4, "0");
 
 export function OrdersProvider({ children }: { children: React.ReactNode }) {
   const placed = useStore(placedStore);
-  const orders = useMemo(() => [...placed, ...demoOrders], [placed]);
+  const { user } = useAuth();
+  useEffect(() => {
+    if (user && user.id !== "usr-1") placedStore.set([]);
+  }, [user]);
+  // Demo orders belong only to the original demo customer. Newly registered
+  // accounts must start with an empty order history.
+  const orders = useMemo(
+    () => user?.email === "tenzin@example.bt" ? [...placed, ...demoOrders] : placed,
+    [placed, user?.email],
+  );
 
   const getByNumber = useCallback(
     (number: string) => orders.find((o) => o.number.toLowerCase() === number.replace(/^#/, "").toLowerCase()),

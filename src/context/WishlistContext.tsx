@@ -4,7 +4,8 @@
  * Wishlist — Phase 2 feature. Stored locally for the demo; will sync to
  * `/api/v1/me/wishlist` once accounts are backed by the API.
  */
-import { createContext, useCallback, useContext, useMemo } from "react";
+import { createContext, useCallback, useContext, useMemo, useEffect } from "react";
+import { useAuth } from "@/context/AuthContext";
 import { createPersistentStore, useStore } from "@/lib/persistent-store";
 
 const wishlistStore = createPersistentStore<string[]>("hl.wishlist", []);
@@ -20,6 +21,11 @@ const WishlistContext = createContext<WishlistContextValue | null>(null);
 
 export function WishlistProvider({ children }: { children: React.ReactNode }) {
   const ids = useStore(wishlistStore);
+  const { user } = useAuth();
+  const userKey = user?.id ?? "guest";
+  useEffect(() => {
+    if (user && user.id !== "usr-1") wishlistStore.set([]);
+  }, [user]);
 
   const has = useCallback((id: string) => ids.includes(id), [ids]);
 

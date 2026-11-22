@@ -1,4 +1,4 @@
-import { Check, Clock, CreditCard, Home, Package, ShoppingBag, Truck } from "lucide-react";
+import { Check, Clock, CreditCard, Home, Package, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import { SmartImage } from "@/components/ui/SmartImage";
 import { StatusBadge } from "@/components/ui/Badge";
@@ -10,7 +10,6 @@ const FLOW: { status: Status; label: string; description: string; icon: typeof C
   { status: "placed", label: "Order Placed", description: "We've received your order.", icon: ShoppingBag },
   { status: "paid", label: "Payment Confirmed", description: "Your payment has been confirmed.", icon: CreditCard },
   { status: "preparing", label: "Preparing", description: "The artisan is preparing and packing your piece.", icon: Package },
-  { status: "shipped", label: "Shipped", description: "On its way with the courier.", icon: Truck },
   { status: "delivered", label: "Delivered", description: "Delivered to your address.", icon: Home },
 ];
 
@@ -23,7 +22,7 @@ export function OrderProgress({ order }: { order: Order }) {
   return (
     <div>
       {/* Desktop */}
-      <ol className="relative hidden grid-cols-5 md:grid" aria-label="Order progress">
+      <ol className="relative hidden grid-cols-4 md:grid" aria-label="Order progress">
         <span className="absolute top-6 right-[10%] left-[10%] h-1 rounded-full bg-border" aria-hidden />
         <span
           className="absolute top-6 left-[10%] h-1 rounded-full bg-success transition-[width] duration-700"

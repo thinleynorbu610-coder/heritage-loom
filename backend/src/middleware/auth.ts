@@ -1,0 +1,4 @@
+import type { Request,Response,NextFunction } from 'express'; import jwt from 'jsonwebtoken'; import { env } from '../config/env.js';
+export type AuthRequest=Request&{user?:{id:string,role:string}};
+export function requireAuth(req:AuthRequest,res:Response,next:NextFunction){const h=req.header('authorization'); if(!h?.startsWith('Bearer ')) return res.status(401).json({error:{code:'UNAUTHENTICATED',message:'Authentication required',details:[]}}); try{const p=jwt.verify(h.slice(7),env.JWT_SECRET,{issuer:env.JWT_ISSUER}) as {sub:string,role:string}; req.user={id:p.sub,role:p.role}; next();}catch{return res.status(401).json({error:{code:'UNAUTHENTICATED',message:'Authentication required',details:[]}})}}
+export const requireRole=(...roles:string[])=>(req:AuthRequest,res:Response,next:NextFunction)=>req.user&&roles.includes(req.user.role)?next():res.status(403).json({error:{code:'FORBIDDEN',message:'Insufficient permissions',details:[]}});

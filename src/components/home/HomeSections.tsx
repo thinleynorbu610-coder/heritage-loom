@@ -111,7 +111,7 @@ export function StoryBehindCraft() {
           </div>
           <div className="absolute top-6 -left-3 rounded-lg bg-surface px-4 py-3 shadow-lift sm:-left-6">
             <p className="text-xs text-muted">Time on the loom</p>
-            <p className="font-serif text-2xl font-semibold">≈ 4 days</p>
+            <p className="whitespace-nowrap font-serif text-2xl font-semibold">4 days</p>
           </div>
         </Reveal>
 

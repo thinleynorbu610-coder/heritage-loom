@@ -4,6 +4,7 @@ import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { LinkButton } from "@/components/ui/Button";
+import { useAuth } from "@/context/AuthContext";
 import { SmartImage } from "@/components/ui/SmartImage";
 import { media } from "@/data/media";
 import { cn } from "@/lib/utils";
@@ -69,6 +70,7 @@ const slides: Slide[] = [
 const AUTOPLAY_MS = 6500;
 
 export function Hero() {
+  const { user } = useAuth();
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -175,7 +177,7 @@ export function Hero() {
               </div>
             ))}
           </dl>
-          <Link
+          {user && <Link
             href="/products/handwoven-yathra-scarf"
             className="group hidden items-center gap-3 rounded-lg border border-white/15 bg-white/5 p-2 pr-5 backdrop-blur-md transition-colors hover:bg-white/10 md:flex"
           >
@@ -187,7 +189,7 @@ export function Hero() {
               <span className="block font-semibold">Yathra Scarf · Dechen Lhamo, Bumthang</span>
             </span>
             <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden />
-          </Link>
+          </Link>}
         </div>
       </div>
 

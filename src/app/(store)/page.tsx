@@ -1,4 +1,7 @@
+"use client";
+
 import { Hero } from "@/components/home/Hero";
+import { useAuth } from "@/context/AuthContext";
 import {
   ArtisanSpotlight,
   FeaturedCategories,
@@ -12,14 +15,16 @@ import { RegionExplorer } from "@/components/home/RegionExplorer";
 import { Testimonials } from "@/components/home/Testimonials";
 
 export default function HomePage() {
+  const { user } = useAuth();
+
   return (
     <>
       <Hero />
       <TrustSection />
       <FeaturedCategories />
-      <FeaturedProducts />
+      {user && <FeaturedProducts />}
       <StoryBehindCraft />
-      <ArtisanSpotlight />
+      {user && <ArtisanSpotlight />}
       <RegionExplorer />
       <Testimonials />
       <TraditionMeetsTomorrow />

@@ -1,8 +1,8 @@
 "use client";
 
-import { ChevronDown, Heart, Menu, Search, ShoppingBag, User } from "lucide-react";
+import { ChevronDown, Heart, LogOut, Menu, Search, ShoppingBag, User } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Logo } from "@/components/brand/Logo";
 import { SmartImage } from "@/components/ui/SmartImage";
@@ -65,7 +65,8 @@ export function Header() {
   const pathname = usePathname();
   const { count, open: openCart } = useCart();
   const { ids } = useWishlist();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const router = useRouter();
   const isClient = useIsClient();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -80,7 +81,7 @@ export function Header() {
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
   const cartCount = isClient ? count : 0;
   const wishCount = isClient ? ids.length : 0;
-  const accountHref = user ? dashboardPathFor(user.role) : "/login";
+  const accountHref = user ? "/account/profile" : "/login";
   const accountLabel = isClient && user ? user.name.split(" ")[0] : "Login";
 
   return (
@@ -104,7 +105,7 @@ export function Header() {
       >
         <div className="container-page flex h-[var(--header-h)] items-center gap-4">
           {/* Mobile: menu */}
-          <button
+          {user && <button
             type="button"
             onClick={() => setMenuOpen(true)}
             className="-ml-2 flex flex-col items-center gap-0.5 rounded-md p-2 text-text lg:hidden"
@@ -113,12 +114,12 @@ export function Header() {
           >
             <Menu className="size-5" aria-hidden />
             <span className="text-[0.62rem] font-semibold">Menu</span>
-          </button>
+          </button>}
 
           <Logo className="mx-auto lg:mx-0" />
 
           <nav aria-label="Main" className="ml-8 hidden flex-1 items-center gap-1 lg:flex">
-            {mainNav.map((item) =>
+            {(user ? [{ label: "Home", href: "/" }, ...mainNav.filter((item) => !["Home", "Our Story", "Categories"].includes(item.label)), { label: "Overview", href: "/account" }, { label: "My Orders", href: "/account/orders" }] : mainNav.filter((item) => ["Home", "Our Story"].includes(item.label))).map((item) =>
               item.label === "Categories" ? (
                 <div key={item.href} className="group/cat relative">
                   <Link
@@ -171,32 +172,24 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-0.5 lg:ml-auto">
-            <HeaderAction
-              label="Search"
-              icon={<Search className="size-5" aria-hidden />}
-              onClick={() => setSearchOpen(true)}
-              className="hidden sm:flex"
-            />
-            <HeaderAction
-              label="Wishlist"
-              icon={<Heart className="size-5" aria-hidden />}
-              count={wishCount}
-              href="/wishlist"
-              className="hidden sm:flex"
-            />
-            <HeaderAction
-              label={accountLabel}
-              icon={<User className="size-5" aria-hidden />}
-              href={accountHref}
-              className="hidden lg:flex"
-            />
-            <HeaderAction
-              label="Cart"
-              icon={<ShoppingBag className="size-5" aria-hidden />}
-              count={cartCount}
-              onClick={openCart}
-              className="-mr-2 lg:mr-0"
-            />
+            {user && <>
+              <HeaderAction label="Search" icon={<Search className="size-5" aria-hidden />} onClick={() => setSearchOpen(true)} className="hidden sm:flex" />
+              <HeaderAction label="Wishlist" icon={<Heart className="size-5" aria-hidden />} count={wishCount} href="/wishlist" className="hidden sm:flex" />
+              <div className="group/profile relative hidden lg:block">
+                <HeaderAction label={accountLabel} icon={<User className="size-5" aria-hidden />} href={accountHref} />
+                <div className="invisible absolute top-full right-0 w-44 pt-2 opacity-0 transition-all group-hover/profile:visible group-hover/profile:opacity-100 group-focus-within/profile:visible group-focus-within/profile:opacity-100">
+                  <div className="rounded-xl border border-border bg-surface p-2 shadow-lift">
+                    <Link href="/account/profile" className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold hover:bg-surface-muted"><User className="size-4" /> Profile</Link>
+                    <button type="button" onClick={() => { logout(); router.push("/"); }} className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-danger hover:bg-danger-soft"><LogOut className="size-4" /> Logout</button>
+                  </div>
+                </div>
+              </div>
+              <HeaderAction label="Cart" icon={<ShoppingBag className="size-5" aria-hidden />} count={cartCount} onClick={openCart} className="-mr-2 lg:mr-0" />
+            </>}
+            {!user && <>
+              <HeaderAction label="Login" icon={<User className="size-5" aria-hidden />} href="/login" />
+              <HeaderAction label="Register" icon={<User className="size-5" aria-hidden />} href="/signup" className="-mr-2 lg:mr-0" />
+            </>}
           </div>
         </div>
       </header>

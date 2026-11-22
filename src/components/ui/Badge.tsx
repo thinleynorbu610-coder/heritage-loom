@@ -45,7 +45,6 @@ const statusMap: Record<string, { label: string; tone: Tone }> = {
   pending: { label: "Pending", tone: "warning" },
   paid: { label: "Paid", tone: "info" },
   preparing: { label: "Preparing", tone: "gold" },
-  shipped: { label: "Shipped", tone: "primary" },
   delivered: { label: "Delivered", tone: "success" },
   cancelled: { label: "Cancelled", tone: "danger" },
   active: { label: "Active", tone: "success" },

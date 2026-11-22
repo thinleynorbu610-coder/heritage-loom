@@ -21,11 +21,9 @@ type SavedAddress = DeliveryAddress & { id: string; label: string };
 
 // Persisted locally for the demo, like cart/wishlist — will sync to the API
 // once accounts are backed by the Heritage Loom backend.
-const addressStore = createPersistentStore<SavedAddress[]>("hl.addresses", [
-  { id: "addr-1", label: "Home", fullName: "Tenzin Norbu", phone: "17 12 34 56", address: "House 12, Norzin Lam", dzongkhag: "Thimphu", gewog: "Chang" },
-]);
+const addressStore = createPersistentStore<SavedAddress[]>("hl.addresses", []);
 
-function Addresses() {
+export function Addresses() {
   const { toast } = useToast();
   const addresses = useStore(addressStore);
   const [open, setOpen] = useState(false);

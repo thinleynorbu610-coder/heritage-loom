@@ -85,7 +85,7 @@ export const media = {
   weavingLoomDetail: u("photo-1707978932202-751b08324daf", 1200),
 
   // Real product photography — uploaded stock shots, not Unsplash placeholders
-  heroBackdrop: "/bag.png",
+  heroBackdrop: "/assets/bag.png",
   ghoRed: "/products/gho-red.png",
   ghoBlue: "/products/gho-blue.png",
   kiraBlack: "/products/kira-black.png",

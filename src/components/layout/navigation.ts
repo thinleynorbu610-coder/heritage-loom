@@ -15,7 +15,7 @@ export const footerNav = {
   ],
   "Heritage Loom": [
     { label: "About Heritage Loom", href: "/our-story" },
-    { label: "Sell on Heritage Loom", href: "/signup/artisan" },
+
     { label: "Contact", href: "/contact" },
     { label: "FAQ", href: "/faq" },
   ],
