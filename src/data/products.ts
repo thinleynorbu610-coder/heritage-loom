@@ -4,7 +4,7 @@ import { media } from "./media";
 /**
  * DEMO DATA — sample products for the prototype.
  * Prices are illustrative, in Ngultrum (Nu.). Structure mirrors the planned
- * GET /api/v1/products response so it can be swapped for live data.
+ * local product data so it can be swapped for live data.
  */
 export const products: Product[] = [
   {

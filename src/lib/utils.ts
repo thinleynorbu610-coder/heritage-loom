@@ -50,7 +50,7 @@ function csvCell(v: string | number) {
   return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 
-/** Trigger a browser download of a CSV file built from one or more row blocks — no backend required. */
+/** Trigger a browser download of a CSV file built from one or more row blocks. */
 export function downloadCsv(filename: string, blocks: (string | number)[][][]) {
   const csv = blocks.map((rows) => rows.map((row) => row.map(csvCell).join(",")).join("\n")).join("\n\n");
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });

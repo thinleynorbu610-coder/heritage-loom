@@ -20,9 +20,7 @@ The experience should feel warm, cultural, premium, accessible, and editorial—
 - React 19
 - TypeScript in strict mode
 - Tailwind CSS 4 through `@tailwindcss/postcss`
-- Node.js backend API
-- MongoDB database
-- REST API integration from the Next.js frontend
+- Local demo data and browser persistence
 - Lucide React for icons
 - Manrope Variable for UI text
 - Cormorant Garamond Variable for display/editorial text
@@ -64,21 +62,15 @@ The root provider composition is in `src/context/Providers.tsx`. Keep provider o
 
 Use the existing `@/*` alias, which maps to `src/*`.
 
-## Backend and data boundary
+## Data boundary
 
-The production architecture uses a separate Node.js backend API with MongoDB as the database. The Next.js application is the frontend client and should communicate with the backend through service/API modules rather than accessing MongoDB directly.
+This is a frontend-only application. Catalog content lives in `src/data/`, while interactive state is managed by React Context providers and `src/lib/persistent-store.ts`.
 
-The current frontend remains runnable with local demo data and browser persistence while the backend integration is completed:
+- Catalog reads are contained in `src/services/catalog.ts`.
+- Authentication is demo behavior in `src/context/AuthContext.tsx`.
+- Cart, wishlist, orders, and submissions use browser persistence only.
 
-- Catalog reads are contained in `src/services/catalog.ts` and currently read from `src/data/`.
-- Client state is managed through React Context providers and `src/lib/persistent-store.ts`.
-- Authentication currently has demo behavior in `src/context/AuthContext.tsx`.
-- Backend requests should be centralized in `src/services/` or a shared API client under `src/lib/`.
-- MongoDB access, schemas/models, authentication secrets, authorization, and business rules belong in the Node.js backend—not in Next.js client components.
-
-The Node.js backend should provide versioned REST endpoints for authentication, users, products, artisans, categories, cart, wishlist, orders, payments, reviews, and administration. It should validate input, authorize every protected resource, and return safe error responses. The backend must never trust client-sent roles, prices, totals, stock, or order states.
-
-Do not make components import catalog data files directly when a service function exists. Keep the migration from demo data to the Node.js/MongoDB API behind the existing service/context boundaries. Do not claim that demo authentication is production authentication.
+Do not claim that demo authentication, local data, or browser persistence is production functionality.
 
 ## Next.js conventions
 
@@ -106,9 +98,8 @@ Use the design tokens in `src/app/globals.css` rather than introducing arbitrary
 
 - Keep cart, wishlist, orders, submissions, auth, and toast behavior in their existing contexts rather than duplicating state locally.
 - Use the shared domain types in `src/types/index.ts`.
-- Do not trust client-only prices, totals, roles, or order state when a real backend is connected; recompute and authorize these on the server/backend boundary.
+- Treat client-only prices, totals, roles, and order state as demo behavior.
 - Preserve role separation between customer, artisan/seller, and admin routes.
-- Avoid IDOR-style access when replacing demo behavior with the Node.js/MongoDB backend.
 - Keep payment logic behind `src/services/payments.ts` and never handle raw card data in the app.
 - Treat local demo data and browser persistence as development/demo behavior, not durable multi-user storage.
 
@@ -134,8 +125,6 @@ Use the design tokens in `src/app/globals.css` rather than introducing arbitrary
 
 ## Do not
 
-- Do not move the Node.js backend into Next.js route handlers or make the frontend access MongoDB directly.
-- Do not replace Node.js or MongoDB with another backend/database without approval.
 - Do not move domain logic into route pages or UI-only components.
 - Do not commit secrets, `.env` files, generated build output, or personal data.
 - Do not overwrite user work or unrelated files.

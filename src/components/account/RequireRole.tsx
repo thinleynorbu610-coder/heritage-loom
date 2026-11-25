@@ -8,7 +8,7 @@ import { useAuth } from "@/context/AuthContext";
 import type { UserRole } from "@/types";
 
 /**
- * Client-side guard for demo auth. Since there's no real backend/session,
+ * Client-side guard for demo auth. Since sessions are local browser state,
  * this renders a friendly prompt rather than redirecting, so the flow stays
  * demonstrable without a hard bounce.
  */

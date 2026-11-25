@@ -4,7 +4,7 @@ import { media } from "./media";
 /**
  * DEMO DATA — fictional artisans for the prototype.
  * Names, stories and photos are placeholders; replace with real artisan
- * profiles (with consent) from GET /api/v1/artisans.
+ * profiles (with consent) from the local artisan data.
  */
 export const artisans: Artisan[] = [
   {

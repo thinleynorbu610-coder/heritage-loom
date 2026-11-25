@@ -1,13 +1,8 @@
 /**
  * Catalogue data-access layer.
  *
- * TODAY: synchronous reads from local demo data in `src/data`.
- * LATER: replace each function body with a call to the Go REST API
- * (e.g. `GET /api/v1/products?category=...`) and make them async.
- * Components only depend on these functions, never on the data files
- * directly, so the swap stays contained to this module.
- *
- * No network requests are made here — there is no backend yet.
+ * Synchronous reads from the local demo catalog in `src/data`.
+ * Components use this module instead of importing data files directly.
  */
 import { artisans } from "@/data/artisans";
 import { categories } from "@/data/categories";

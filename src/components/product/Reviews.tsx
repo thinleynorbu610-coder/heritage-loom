@@ -14,7 +14,7 @@ import type { Review } from "@/types";
 
 /**
  * Reviews — Phase 2. New reviews are kept in component state for the demo;
- * they will be submitted to `POST /api/v1/products/{id}/reviews` later.
+ * they will be submitted to `local demo state` later.
  */
 export function Reviews({
   productId,

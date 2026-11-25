@@ -88,8 +88,7 @@ export default function OurStoryPage() {
             <p className="eyebrow">Roadmap</p>
             <h2 className="mt-4 font-display text-4xl sm:text-5xl">Growing in phases.</h2>
             <p className="mt-4 text-lg text-muted">
-              This frontend shows the full experience. Features are delivered in phases as the Go API, PostgreSQL
-              database and payment integration come online.
+              This frontend shows the full experience using local demo data and browser persistence.
             </p>
           </Reveal>
           <ol className="flex flex-col gap-4">

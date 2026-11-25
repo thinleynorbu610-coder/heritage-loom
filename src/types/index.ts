@@ -3,7 +3,7 @@
  *
  * These mirror the shapes the planned Go REST API is expected to return, so
  * mock data in `src/data` can later be swapped for API responses without
- * touching components. IDs are strings (UUIDs from PostgreSQL in production).
+ * touching components. IDs are strings for local demo records.
  */
 
 export type ID = string;

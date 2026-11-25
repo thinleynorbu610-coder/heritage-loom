@@ -314,7 +314,7 @@ function CheckoutInner() {
                     <Info className="mt-0.5 size-4 shrink-0" aria-hidden />
                     <p>
                       <strong>Demo mode.</strong> The QR code below is a placeholder — no real payment is taken. A live
-                      bank gateway will replace this once the Heritage Loom backend is connected.
+                      bank gateway will replace this once the frontend demo is connected.
                     </p>
                   </div>
 

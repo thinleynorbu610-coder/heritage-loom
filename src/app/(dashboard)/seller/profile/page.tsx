@@ -15,7 +15,7 @@ import { getArtisanById, getRegions } from "@/services/catalog";
 type ProfileOverride = { name: string; specialty: string; region: string; village: string; story: string };
 
 // Local overrides for the demo — the catalog's seed data stays the source of
-// truth elsewhere until the backend owns artisan profiles; this keeps a
+// truth elsewhere until profile persistence is added; this keeps a
 // seller's own edits (and this page's preview) consistent across reloads.
 const profileOverridesStore = createPersistentStore<Record<string, ProfileOverride>>("hl.sellerProfileOverrides", {});
 

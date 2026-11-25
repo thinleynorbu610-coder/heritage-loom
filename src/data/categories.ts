@@ -1,7 +1,7 @@
 import type { Category, CategorySlug } from "@/types";
 import { media } from "./media";
 
-/** DEMO DATA — categories will come from GET /api/v1/categories. */
+/** DEMO DATA — categories will come from the local category data. */
 export const categories: Category[] = [
   {
     slug: "handwoven-textiles",

@@ -2,7 +2,7 @@
 
 /**
  * Wishlist — Phase 2 feature. Stored locally for the demo; will sync to
- * `/api/v1/me/wishlist` once accounts are backed by the API.
+ *
  */
 import { createContext, useCallback, useContext, useMemo, useEffect } from "react";
 import { useAuth } from "@/context/AuthContext";

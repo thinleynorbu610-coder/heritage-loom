@@ -2,8 +2,7 @@
 
 /**
  * DEMO AUTHENTICATION — no credentials are checked and nothing leaves the
- * browser. The Go API will issue sessions (e.g. HTTP-only cookies) and this
- * provider will then read the current user from `GET /api/v1/me`.
+ * browser. Sessions are stored locally for this frontend demo.
  */
 import { createContext, useCallback, useContext, useMemo } from "react";
 import { createPersistentStore, useIsClient, useStore } from "@/lib/persistent-store";

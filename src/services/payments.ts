@@ -1,14 +1,6 @@
 /**
- * Payment integration boundary.
- *
- * There is NO live payment gateway in this frontend. The checkout collects a
- * payment *method choice* only. When the Go backend is ready, it will:
- *   1. create a payment intent with the chosen external gateway,
- *   2. return a redirect URL or in-app confirmation payload,
- *   3. confirm the order via webhook.
- * The frontend will then call something like `POST /api/v1/orders/{id}/pay`
- * and follow the gateway's redirect. Until then, orders are recorded locally
- * in demo mode and nothing is charged.
+ * Demo payment options only. The checkout records a payment method locally;
+ * no payment gateway is connected and nothing is charged.
  */
 import type { PaymentMethodId } from "@/types";
 

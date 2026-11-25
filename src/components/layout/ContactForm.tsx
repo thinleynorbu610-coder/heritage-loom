@@ -19,7 +19,7 @@ export function ContactForm() {
     setErrors(errs);
     if (Object.keys(errs).length) return;
     e.currentTarget.reset();
-    toast({ title: "Message ready to send", description: "Demo mode — messages will be delivered once the backend is connected." });
+    toast({ title: "Message ready to send", description: "Demo mode — messages are not sent." });
   };
 
   return (

@@ -3,7 +3,7 @@
 /**
  * Orders placed in demo mode are stored locally so the full flow
  * (checkout → confirmation → tracking) can be demonstrated.
- * Will be replaced by `POST /api/v1/orders` and `GET /api/v1/me/orders`.
+ *
  */
 import { createContext, useCallback, useContext, useMemo, useEffect } from "react";
 import { demoOrders } from "@/data/orders";

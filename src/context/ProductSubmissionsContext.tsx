@@ -4,8 +4,8 @@
  * Products a seller submits through "Add Product" are stored locally (same
  * pattern as OrdersContext) so the full flow — seller submits, admin
  * reviews in Products moderation, approval makes it live in the seller's
- * own inventory — can be demonstrated without a backend.
- * Will be replaced by `POST /api/v1/products` + admin review endpoints.
+ * own inventory — can be demonstrated with local browser state.
+ *
  */
 import { createContext, useCallback, useContext, useMemo } from "react";
 import { pendingProducts as seedPending } from "@/data/products";

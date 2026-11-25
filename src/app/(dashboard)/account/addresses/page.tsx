@@ -20,7 +20,7 @@ const emptyAddress: DeliveryAddress = { fullName: "", phone: "", address: "", dz
 type SavedAddress = DeliveryAddress & { id: string; label: string };
 
 // Persisted locally for the demo, like cart/wishlist — will sync to the API
-// once accounts are backed by the Heritage Loom backend.
+// once accounts are backed by the frontend demo.
 const addressStore = createPersistentStore<SavedAddress[]>("hl.addresses", []);
 
 export function Addresses() {
