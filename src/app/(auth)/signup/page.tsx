@@ -23,7 +23,7 @@ export default function SignupPage() {
 
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const errs: Errors = {};
     if (form.name.trim().length < 2) errs.name = "Please enter your full name.";
@@ -35,12 +35,15 @@ export default function SignupPage() {
     setErrors(errs);
     if (Object.keys(errs).length) return;
     setLoading(true);
-    window.setTimeout(() => {
-      const user = register({ name: form.name, email: form.email, phone: form.phone, role: "customer" });
-      setLoading(false);
+    try {
+      const user = await register({ name: form.name, email: form.email, phone: form.phone, role: "customer", password: form.password });
       toast({ title: `Welcome to Heritage Loom, ${user.name.split(" ")[0]}`, description: "Your account has been created." });
-      router.push(dashboardPathFor("customer"));
-    }, 500);
+      router.push(dashboardPathFor(user.role));
+    } catch (error) {
+      toast({ title: "Could not create account", description: error instanceof Error ? error.message : "Please try again." });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

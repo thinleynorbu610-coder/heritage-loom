@@ -21,9 +21,18 @@ function LoginForm() {
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
   const [loading, setLoading] = useState(false);
 
-  const redirect = (role: UserRole) => router.push(params.get("next") || dashboardPathFor(role));
+  const redirect = (role: UserRole) => {
+    const requestedPath = params.get("next");
+    const rolePath = dashboardPathFor(role);
+    const allowed = requestedPath && (
+      (role === "admin" && requestedPath.startsWith("/admin")) ||
+      (role === "artisan" && requestedPath.startsWith("/seller")) ||
+      (role === "customer" && requestedPath.startsWith("/account"))
+    );
+    router.push(allowed ? requestedPath : rolePath);
+  };
 
-  const submit = (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     const errs: typeof errors = {};
     if (!/^\S+@\S+\.\S+$/.test(email)) errs.email = "Please enter a valid email address.";
@@ -31,12 +40,15 @@ function LoginForm() {
     setErrors(errs);
     if (Object.keys(errs).length) return;
     setLoading(true);
-    window.setTimeout(() => {
-      const user = loginWithEmail(email);
-      setLoading(false);
-      toast({ title: `Welcome back, ${user.name.split(" ")[0]}`, description: "Demo login — no password is verified." });
+    try {
+      const user = await loginWithEmail(email, password);
+      toast({ title: `Welcome back, ${user.name.split(" ")[0]}`, description: "You are now signed in." });
       redirect(user.role);
-    }, 500);
+    } catch (error) {
+      toast({ title: "Login failed", description: error instanceof Error ? error.message : "Please check your credentials." });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const quickLogin = (role: UserRole) => {
@@ -82,7 +94,7 @@ function LoginForm() {
       <div className="mt-6 flex items-start gap-2 rounded-lg border border-info/20 bg-info-soft p-4 text-sm text-info">
         <Info className="mt-0.5 size-4 shrink-0" aria-hidden />
         <p>
-          This is a demo — any email/password logs you in. Try a role:{" "}
+          Use your registered account to log in. Demo role shortcuts are still available:{" "}
           <button type="button" onClick={() => quickLogin("customer")} className="font-semibold underline underline-offset-2">
             Customer
           </button>

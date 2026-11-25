@@ -1,11 +1,8 @@
 "use client";
 
-/**
- * DEMO AUTHENTICATION — no credentials are checked and nothing leaves the
- * browser. Sessions are stored locally for this frontend demo.
- */
 import { createContext, useCallback, useContext, useMemo } from "react";
 import { createPersistentStore, useIsClient, useStore } from "@/lib/persistent-store";
+import { apiRequest, authHeaders } from "@/lib/api";
 import type { SessionUser, UserRole } from "@/types";
 
 export const DEMO_ACCOUNTS: Record<UserRole, SessionUser> = {
@@ -15,73 +12,41 @@ export const DEMO_ACCOUNTS: Record<UserRole, SessionUser> = {
 };
 
 const sessionStore = createPersistentStore<SessionUser | null>("hl.session", null);
-
 interface AuthContextValue {
-  user: SessionUser | null;
-  ready: boolean;
+  user: SessionUser | null; ready: boolean;
   loginAs: (role: UserRole) => SessionUser;
-  loginWithEmail: (email: string) => SessionUser;
-  register: (input: { name: string; email: string; phone?: string; role?: UserRole }) => SessionUser;
+  loginWithEmail: (email: string, password: string) => Promise<SessionUser>;
+  register: (input: { name: string; email: string; phone?: string; role?: UserRole; password?: string }) => Promise<SessionUser>;
   updateProfile: (patch: Partial<Pick<SessionUser, "name" | "email" | "phone">>) => void;
   logout: () => void;
 }
-
 const AuthContext = createContext<AuthContextValue | null>(null);
 
+function apiUser(user: { id: string; name: string; email: string; role: "user" | "seller" | "admin" }): SessionUser {
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role === "user" ? "customer" : user.role === "seller" ? "artisan" : "admin",
+  };
+}
+function saveSession(user: SessionUser, token: string) { sessionStore.set(user); window.localStorage.setItem("hl.auth.token", token); }
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const user = useStore(sessionStore);
-  const ready = useIsClient();
-
-  const loginAs = useCallback((role: UserRole) => {
-    const u = DEMO_ACCOUNTS[role];
-    sessionStore.set(u);
-    return u;
+  const user = useStore(sessionStore); const ready = useIsClient();
+  const loginAs = useCallback((role: UserRole) => { const u = DEMO_ACCOUNTS[role]; sessionStore.set(u); return u; }, []);
+  const loginWithEmail = useCallback(async (email: string, password: string) => {
+    const result = await apiRequest<{ user: { id: string; name: string; email: string; role: "user" | "seller" | "admin" }; token: string }>("/api/auth/login", { method: "POST", body: JSON.stringify({ email, password }) });
+    const u = apiUser(result.user); saveSession(u, result.token); return u;
   }, []);
-
-  const loginWithEmail = useCallback((email: string) => {
-    const match = Object.values(DEMO_ACCOUNTS).find((a) => a.email.toLowerCase() === email.trim().toLowerCase());
-    const u: SessionUser = match ?? {
-      ...DEMO_ACCOUNTS.customer,
-      id: "usr-guest",
-      email: email.trim(),
-      name: email.split("@")[0].replace(/[._-]/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()),
-    };
-    sessionStore.set(u);
-    return u;
+  const register = useCallback(async ({ name, email, phone, password = "temporary-demo-password" }: { name: string; email: string; phone?: string; role?: UserRole; password?: string }) => {
+    const result = await apiRequest<{ user: { id: string; name: string; email: string; role: "user" | "seller" | "admin" }; token: string }>("/api/auth/register", { method: "POST", body: JSON.stringify({ name, email, password }) });
+    const u = { ...apiUser(result.user), phone }; saveSession(u, result.token); return u;
   }, []);
-
-  const register = useCallback<AuthContextValue["register"]>(({ name, email, phone, role = "customer" }) => {
-    const u: SessionUser = {
-      id: `usr-${Date.now()}`,
-      name,
-      email,
-      phone,
-      role,
-      artisanId: role === "artisan" ? "art-001" : undefined,
-    };
-    sessionStore.set(u);
-    return u;
-  }, []);
-
-  const updateProfile = useCallback<AuthContextValue["updateProfile"]>((patch) => {
-    sessionStore.set((prev) => (prev ? { ...prev, ...patch } : prev));
-  }, []);
-
-  const logout = useCallback(() => sessionStore.set(null), []);
-
-  const value = useMemo(
-    () => ({ user, ready, loginAs, loginWithEmail, register, updateProfile, logout }),
-    [user, ready, loginAs, loginWithEmail, register, updateProfile, logout],
-  );
+  const updateProfile = useCallback((patch: Partial<Pick<SessionUser, "name" | "email" | "phone">>) => sessionStore.set((prev) => prev ? { ...prev, ...patch } : prev), []);
+  const logout = useCallback(() => { sessionStore.set(null); window.localStorage.removeItem("hl.auth.token"); }, []);
+  const value = useMemo(() => ({ user, ready, loginAs, loginWithEmail, register, updateProfile, logout }), [user, ready, loginAs, loginWithEmail, register, updateProfile, logout]);
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
-
-export function useAuth() {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used inside <AuthProvider>");
-  return ctx;
-}
-
-export function dashboardPathFor(role: UserRole) {
-  return role === "admin" ? "/admin" : role === "artisan" ? "/seller" : "/account";
-}
+export function useAuth() { const ctx = useContext(AuthContext); if (!ctx) throw new Error("useAuth must be used inside <AuthProvider>"); return ctx; }
+export function dashboardPathFor(role: UserRole) { return role === "admin" ? "/admin" : role === "artisan" ? "/seller" : "/account"; }
