@@ -21,7 +21,7 @@ function pickTestimonials(count: number) {
 export function Testimonials() {
   const items = pickTestimonials(8);
   return (
-    <section className="bg-surface-muted py-20 sm:py-28" aria-labelledby="testimonials-title">
+    <section className="bg-surface-muted py-16 sm:py-24" aria-labelledby="testimonials-title">
       <div className="container-page">
         <Carousel
           label="Customer stories"

@@ -25,7 +25,7 @@ export function RegionExplorer() {
     .slice(0, 3);
 
   return (
-    <section className="container-page py-20 sm:py-28" aria-labelledby="regions-title">
+    <section className="container-page py-16 sm:py-24" aria-labelledby="regions-title">
       <SectionHeading
         eyebrow="Explore Bhutan by region"
         title={<span id="regions-title">From the valleys of the west to the hills of the east.</span>}
