@@ -6,7 +6,7 @@ import { Button, LinkButton } from "@/components/ui/Button";
 export default function GlobalError({ reset }: { error: Error & { digest?: string }; reset: () => void }) {
   return (
     <main id="main" className="flex min-h-[70vh] flex-col items-center justify-center px-6 py-16 text-center">
-      <span className="flex size-14 items-center justify-center rounded-full bg-danger-soft text-danger">
+      <span className="flex size-14 items-center justify-center text-danger">
         <AlertTriangle className="size-6" aria-hidden />
       </span>
       <h1 className="mt-6 font-display text-5xl">Something went wrong</h1>

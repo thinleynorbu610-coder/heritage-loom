@@ -3,7 +3,7 @@ import { Rating } from "@/components/ui/Rating";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { reviews } from "@/data/reviews";
 import { getProductById } from "@/services/catalog";
-import { Carousel } from "./Carousel";
+import { CoverFlow } from "@/components/ui/CoverFlow";
 
 /** Homepage testimonials — one review per author, most recent first. */
 function pickTestimonials(count: number) {
@@ -21,10 +21,13 @@ function pickTestimonials(count: number) {
 export function Testimonials() {
   const items = pickTestimonials(8);
   return (
-    <section className="bg-surface-muted py-20 sm:py-28" aria-labelledby="testimonials-title">
+    <section className="overflow-hidden bg-surface-muted py-20 sm:py-28" aria-labelledby="testimonials-title">
       <div className="container-page">
-        <Carousel
+        <CoverFlow
           label="Customer stories"
+          slideClassName="w-[84%] sm:w-[56%] lg:w-[36%]"
+          veilClassName="bg-surface-muted"
+          veilStrength={0.5}
           header={
             <SectionHeading
               eyebrow="Customer stories"
@@ -38,7 +41,7 @@ export function Testimonials() {
             return (
               <figure
                 key={r.id}
-                className="flex w-[85%] shrink-0 snap-start flex-col rounded-xl border border-border bg-surface p-6 shadow-soft sm:w-[62%] lg:w-[32%] xl:w-[26%]"
+                className="flex flex-col rounded-xl border border-border bg-surface p-6 sm:p-8"
               >
                 <Quote className="size-7 text-secondary" aria-hidden />
                 <Rating value={r.rating} showValue={false} className="mt-4" />
@@ -59,7 +62,7 @@ export function Testimonials() {
               </figure>
             );
           })}
-        </Carousel>
+        </CoverFlow>
       </div>
     </section>
   );

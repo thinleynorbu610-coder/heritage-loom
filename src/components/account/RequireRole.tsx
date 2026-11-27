@@ -28,7 +28,7 @@ export function RequireRole({ role, children }: { role: UserRole; children: Reac
   if (!user || user.role !== role) {
     return (
       <div className="flex min-h-[50vh] flex-col items-center justify-center rounded-2xl border border-dashed border-border-strong bg-surface p-10 text-center">
-        <span className="flex size-14 items-center justify-center rounded-full bg-primary-soft text-primary">
+        <span className="flex size-14 items-center justify-center text-primary">
           <LogIn className="size-6" aria-hidden />
         </span>
         <h1 className="mt-5 font-serif text-3xl font-semibold">

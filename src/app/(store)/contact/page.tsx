@@ -17,7 +17,7 @@ export default function ContactPage() {
             { icon: Clock, label: "Hours", value: "Mon–Fri, 9:00–17:00 BTT" },
           ].map(({ icon: Icon, label, value }) => (
             <li key={label} className="flex items-start gap-4">
-              <span className="flex size-11 items-center justify-center rounded-full bg-primary-soft text-primary">
+              <span className="flex size-11 items-center justify-center text-primary">
                 <Icon className="size-5" aria-hidden />
               </span>
               <span>

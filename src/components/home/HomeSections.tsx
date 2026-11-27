@@ -28,33 +28,34 @@ import {
   getCategories,
   getFeaturedProducts,
 } from "@/services/catalog";
-import { Carousel } from "./Carousel";
+import { CoverFlow } from "@/components/ui/CoverFlow";
 
 export function FeaturedCategories() {
   const categories = getCategories();
   const all = getAllProducts();
   return (
-    <section className="container-page py-20 sm:py-28" aria-labelledby="categories-title">
-      <Reveal>
-        <SectionHeading
-          eyebrow="Featured categories"
-          title={<span id="categories-title">Crafted in Bhutan.</span>}
-          description="Six living traditions, each shaped by generations of makers. Choose a craft to begin exploring."
-          action={
-            <LinkButton href="/categories" variant="outline">
-              All categories <ArrowRight className="size-4" aria-hidden />
-            </LinkButton>
+    <section className="overflow-hidden py-20 sm:py-28" aria-labelledby="categories-title">
+      <Reveal className="container-page">
+        <CoverFlow
+          label="Featured categories"
+          header={
+            <SectionHeading
+              eyebrow="Featured categories"
+              title={<span id="categories-title">Crafted in Bhutan.</span>}
+              description="Six living traditions, each shaped by generations of makers. Choose a craft to begin exploring."
+              action={
+                <LinkButton href="/categories" variant="outline">
+                  All categories <ArrowRight className="size-4" aria-hidden />
+                </LinkButton>
+              }
+            />
           }
-        />
+        >
+          {categories.map((c) => (
+            <CategoryCard key={c.slug} category={c} count={all.filter((p) => p.category === c.slug).length} />
+          ))}
+        </CoverFlow>
       </Reveal>
-      {/* Mobile: swipeable row. Tablet/Desktop: editorial grid. */}
-      <div className="-mx-4 mt-12 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 scrollbar-none sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-5 sm:overflow-visible sm:px-0 lg:grid-cols-3">
-        {categories.map((c, i) => (
-          <Reveal key={c.slug} delay={(i % 3) * 80} className="w-[78%] shrink-0 snap-start sm:w-auto">
-            <CategoryCard category={c} count={all.filter((p) => p.category === c.slug).length} />
-          </Reveal>
-        ))}
-      </div>
     </section>
   );
 }
@@ -128,7 +129,7 @@ export function StoryBehindCraft() {
           <ol className="mt-10 flex flex-col divide-y divide-border border-y border-border">
             {storyPoints.map(({ icon: Icon, title, text }) => (
               <li key={title} className="flex items-start gap-4 py-4">
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary">
+                <span className="flex size-10 shrink-0 items-center justify-center text-primary">
                   <Icon className="size-[1.1rem]" aria-hidden />
                 </span>
                 <div>
@@ -152,8 +153,11 @@ export function ArtisanSpotlight() {
   return (
     <section className="overflow-hidden bg-surface-muted py-20 sm:py-28" aria-labelledby="makers-title">
       <div className="container-page">
-        <Carousel
+        <CoverFlow
           label="Featured artisans"
+          slideClassName="w-[74%] sm:w-[44%] lg:w-[28%]"
+          veilClassName="bg-surface-muted"
+          veilStrength={0.45}
           header={
             <SectionHeading
               eyebrow="Artisan spotlight"
@@ -163,11 +167,9 @@ export function ArtisanSpotlight() {
           }
         >
           {artisans.map((a) => (
-            <div key={a.id} className="w-[80%] shrink-0 snap-start sm:w-[46%] lg:w-[31%] xl:w-[23.5%]">
-              <ArtisanCard artisan={a} variant="spotlight" />
-            </div>
+            <ArtisanCard key={a.id} artisan={a} variant="spotlight" />
           ))}
-        </Carousel>
+        </CoverFlow>
       </div>
     </section>
   );
@@ -259,7 +261,7 @@ export function TrustSection() {
         {trust.map(({ icon: Icon, title, text }, i) => (
           <li key={title} className={i === 4 ? "col-span-2 sm:col-span-1" : undefined}>
             <Reveal delay={i * 60} className="flex flex-col items-center text-center">
-              <span className="flex size-12 items-center justify-center rounded-full border border-border bg-surface text-primary">
+              <span className="flex size-12 items-center justify-center text-primary">
                 <Icon className="size-5" aria-hidden />
               </span>
               <p className="mt-4 font-semibold">{title}</p>

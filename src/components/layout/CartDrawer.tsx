@@ -45,7 +45,7 @@ export function CartDrawer() {
     >
       {empty ? (
         <div className="flex h-full flex-col items-center justify-center px-8 py-16 text-center">
-          <div className="flex size-16 items-center justify-center rounded-full bg-surface-muted text-primary">
+          <div className="flex size-16 items-center justify-center text-primary">
             <ShoppingBag className="size-7" aria-hidden />
           </div>
           <h3 className="mt-5 font-serif text-2xl font-semibold">Your cart is empty</h3>

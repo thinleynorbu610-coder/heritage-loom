@@ -131,7 +131,7 @@ function SellerDashboard() {
               href={a.href}
               className="flex flex-col items-start gap-2 rounded-xl border border-border-strong bg-surface p-4 transition-colors hover:border-text hover:bg-surface-muted"
             >
-              <span className="flex size-9 items-center justify-center rounded-full bg-secondary-soft text-accent">
+              <span className="flex size-9 items-center justify-center text-accent">
                 <a.icon className="size-4" />
               </span>
               <span className="block text-sm font-semibold text-text">{a.label}</span>

@@ -85,7 +85,7 @@ function ModerationCenter() {
 
       <div className="mt-6 flex flex-col gap-4 rounded-xl border border-secondary/30 bg-secondary-soft p-5 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-start gap-3">
-          <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-surface text-accent">
+          <span className="flex size-10 shrink-0 items-center justify-center text-accent">
             <ScrollText className="size-5" />
           </span>
           <div>

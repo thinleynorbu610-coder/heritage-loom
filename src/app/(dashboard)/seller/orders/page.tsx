@@ -279,7 +279,7 @@ function ReceiptMock({ order, large }: { order: SellerOrder; large?: boolean }) 
       )}
     >
       <p className="text-sm font-bold tracking-wide">{order.paymentMethod}</p>
-      <span className="flex size-10 items-center justify-center rounded-full bg-white/15">
+      <span className="flex size-10 items-center justify-center">
         <Check className="size-5" />
       </span>
       <p className="text-xs text-white/80">Fund Transfer Successful</p>

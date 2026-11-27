@@ -102,7 +102,7 @@ export default async function ProductPage({ params }: PageProps<"/products/[slug
             {passport.map(({ icon: Icon, q, a, detail, href }) => (
               <li key={q} className="bg-background">
                 <a href={href} className="group flex h-full items-start gap-4 p-6 transition-colors hover:bg-surface">
-                  <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary-soft text-primary">
+                  <span className="flex size-11 shrink-0 items-center justify-center text-primary">
                     <Icon className="size-5" aria-hidden />
                   </span>
                   <span className="min-w-0">

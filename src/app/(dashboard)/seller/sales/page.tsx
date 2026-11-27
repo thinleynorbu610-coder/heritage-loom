@@ -136,7 +136,7 @@ function Analytics() {
       {lowStock.length > 0 && (
         <div className="mt-8 flex flex-col items-start gap-4 rounded-xl bg-ink p-6 text-white sm:flex-row sm:items-center sm:justify-between sm:p-8">
           <div className="flex items-start gap-3">
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-white/10 text-secondary">
+            <span className="flex size-10 shrink-0 items-center justify-center text-secondary">
               <AlertTriangle className="size-5" />
             </span>
             <div>

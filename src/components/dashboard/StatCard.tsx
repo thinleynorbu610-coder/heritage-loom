@@ -24,8 +24,8 @@ export function StatCard({
         <p className={cn("text-sm font-semibold", tone === "primary" ? "text-white/70" : tone === "danger" ? "text-danger" : "text-muted")}>{label}</p>
         <span
           className={cn(
-            "flex size-9 items-center justify-center rounded-full",
-            tone === "primary" ? "bg-white/10 text-secondary" : tone === "danger" ? "bg-surface text-danger" : "bg-primary-soft text-primary",
+            "flex size-9 items-center justify-center",
+            tone === "primary" ? "text-secondary" : tone === "danger" ? "text-danger" : "text-primary",
           )}
         >
           {icon}

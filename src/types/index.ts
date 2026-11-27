@@ -40,9 +40,14 @@ export interface Region {
   name: string;
   /** Neutral, factual descriptor. Avoid unverified craft claims. */
   summary: string;
+  /** The dzong this region is represented by (shown on the map). */
+  landmark: string;
+  /** Photo of the region's dzong or town (see `imageCredit`). */
   image: string;
-  /** Position on the illustrative west→east strip (0–100). Not a real map projection. */
-  position: { x: number; y: number };
+  /** Licence attribution for `image` — required for CC BY / CC BY-SA photos. */
+  imageCredit: { author: string; license: string; source: string };
+  /** Real location of the dzongkhag's administrative dzong (WGS84 degrees). */
+  coordinates: { lat: number; lon: number };
 }
 
 export interface CraftMilestone {
