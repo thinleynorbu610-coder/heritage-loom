@@ -34,7 +34,7 @@ export function FeaturedCategories() {
   const categories = getCategories();
   const all = getAllProducts();
   return (
-    <section className="container-page py-20 sm:py-28" aria-labelledby="categories-title">
+    <section className="container-page py-16 sm:py-24" aria-labelledby="categories-title">
       <Reveal>
         <SectionHeading
           eyebrow="Featured categories"
@@ -62,7 +62,7 @@ export function FeaturedCategories() {
 export function FeaturedProducts() {
   const products = getFeaturedProducts(6);
   return (
-    <section className="border-y border-border bg-surface py-20 sm:py-28" aria-labelledby="featured-title">
+    <section className="border-y border-border bg-surface py-16 sm:py-24" aria-labelledby="featured-title">
       <div className="container-page">
         <Reveal>
           <SectionHeading
@@ -94,7 +94,7 @@ const storyPoints = [
 
 export function StoryBehindCraft() {
   return (
-    <section className="container-page py-20 sm:py-28" aria-labelledby="story-title">
+    <section className="container-page py-16 sm:py-24" aria-labelledby="story-title">
       <div className="grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
         <Reveal className="relative">
           <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-accent-soft sm:w-[82%]">
@@ -150,7 +150,7 @@ export function StoryBehindCraft() {
 export function ArtisanSpotlight() {
   const artisans = getAllArtisans().filter((a) => a.verified);
   return (
-    <section className="overflow-hidden bg-surface-muted py-20 sm:py-28" aria-labelledby="makers-title">
+    <section className="overflow-hidden bg-surface-muted py-16 sm:py-24" aria-labelledby="makers-title">
       <div className="container-page">
         <Carousel
           label="Featured artisans"
@@ -192,7 +192,7 @@ export function TraditionMeetsTomorrow() {
     },
   ];
   return (
-    <section className="relative overflow-hidden bg-ink py-20 text-background sm:py-28" aria-labelledby="tomorrow-title">
+    <section className="relative overflow-hidden bg-ink py-16 text-background sm:py-24" aria-labelledby="tomorrow-title">
       <div className="absolute inset-0 bg-motif-light" aria-hidden />
       <div className="container-page relative grid gap-14 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-20">
         <Reveal>
@@ -253,7 +253,7 @@ const trust = [
 
 export function TrustSection() {
   return (
-    <section className="container-page py-16 sm:py-20" aria-label="Why shop with Heritage Loom">
+    <section className="container-page py-12 sm:py-16" aria-label="Why shop with Heritage Loom">
       <MotifDivider className="mb-14" />
       <ul className="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-5">
         {trust.map(({ icon: Icon, title, text }, i) => (
@@ -274,7 +274,7 @@ export function TrustSection() {
 
 export function SellerCallout() {
   return (
-    <section className="container-page pb-20 sm:pb-28">
+    <section className="container-page pb-16 sm:pb-24">
       <Reveal className="relative overflow-hidden rounded-2xl border border-border bg-secondary-soft/70 bg-motif px-6 py-12 sm:px-12 sm:py-14">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
           <div className="max-w-xl">
